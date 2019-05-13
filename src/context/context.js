@@ -31,13 +31,8 @@ class ContextProvider extends Component {
     fetch(URL)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
-        setTimeout(() => {
-          this.setState({
-            trackList: data.message.body.track_list
-          })
-        }, 2000)
-        console.log(this.state)
+        const trackList = data.message.body.track_list.map(item => item.track)
+        this.setState({ trackList })
       })
       .catch(err => console.log("Error to get Musix Match data:", err))
   }
