@@ -4,7 +4,7 @@ import TrackList from "../track/TrackList"
 
 const Home = () => {
   return (
-    <HomeWrapper>
+    <HomeWrapper className="container">
       <TrackList />
     </HomeWrapper>
   )
