@@ -8,11 +8,7 @@ class ContextProvider extends Component {
   constructor(props) {
     super(props) 
     this.state = {
-      trackList: [
-        // { track: { trackName: "music_a" } },
-        // { track: { trackName: "music_b" } },
-        // { track: { trackName: "music_c" } }
-      ],
+      trackList: [],
       heading: "Top 10 Tracks"
     }
   }
@@ -22,11 +18,13 @@ class ContextProvider extends Component {
 
     const MUSIX_MATCH_ROOT_URL = "https://api.musixmatch.com/ws/1.1/"
 
-    const URL = 
-      CORS_URL + 
-      MUSIX_MATCH_ROOT_URL +
-      "chart.tracks.get?chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1" + 
+    const API_METHOD = "chart.tracks.get"
+
+    const PARAMS = 
+      "?chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1" +
       `&apikey=${process.env.REACT_APP_MUSIXMATCH_API_KEY}`
+
+    const URL = CORS_URL + MUSIX_MATCH_ROOT_URL + API_METHOD + PARAMS
 
     fetch(URL)
       .then(response => response.json())
