@@ -11,7 +11,7 @@ class TrackList extends Component {
       <ContextConsumer>
         { 
           context => {
-            console.log(context)
+            // console.log(context)
             const { trackList, heading } = context
             return (
               <TrackListWrapper>

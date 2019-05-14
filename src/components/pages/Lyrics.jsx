@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 import Loading from "../layout/Loading"
+import { fetchLyrics, fetchTrack } from "../../api/musixmatch"
 
 class Lyrics extends Component {
   constructor(props) {
@@ -10,58 +11,34 @@ class Lyrics extends Component {
       track: null,
       lyrics: null 
     }
-    this.fetchLyrics = this.fetchLyrics.bind(this)
-    this.fetchTrack = this.fetchTrack.bind(this)
+    this.updateLyrics = this.updateLyrics.bind(this)
+    this.updateTrack = this.updateTrack.bind(this)
   }
 
   componentDidMount() {
     const trackId = this.props.match.params.id
-    this.fetchLyrics(trackId)
-    this.fetchTrack(trackId)
+    this.updateLyrics(trackId)
+    this.updateTrack(trackId)
   }
 
-  fetchLyrics(trackId) {
-    const CORS_URL = "https://cors-anywhere.herokuapp.com/"
-
-    const MUSIX_MATCH_ROOT_URL = "https://api.musixmatch.com/ws/1.1/"
-
-    const API_METHOD = "track.lyrics.get"
-
-    const PARAMS = 
-      `?track_id=${trackId}` +
-      `&apikey=${process.env.REACT_APP_MUSIXMATCH_API_KEY}`
-
-    const URL = CORS_URL + MUSIX_MATCH_ROOT_URL + API_METHOD + PARAMS
-
-    fetch(URL)
-      .then(response => response.json())
+  updateLyrics(trackId) {
+    fetchLyrics(trackId)
       .then(data => {
-        const lyrics = data.message.body.lyrics
-        // console.log(lyrics)
-        this.setState({ lyrics })
+        console.log("lyrics:", data)
+        this.setState({ 
+          lyrics: data.message.body.lyrics 
+        })
       })
       .catch(err => console.log("Error to get Musix Match data:", err))
   }
 
-  fetchTrack(trackId) {
-    const CORS_URL = "https://cors-anywhere.herokuapp.com/"
-
-    const MUSIX_MATCH_ROOT_URL = "https://api.musixmatch.com/ws/1.1/"
-
-    const API_METHOD = "track.get"
-
-    const PARAMS = 
-      `?track_id=${trackId}` +
-      `&apikey=${process.env.REACT_APP_MUSIXMATCH_API_KEY}`
-
-    const URL = CORS_URL + MUSIX_MATCH_ROOT_URL + API_METHOD + PARAMS
-
-    fetch(URL)
-      .then(response => response.json())
-      .then(data => {
-        const track = data.message.body.track
-        // console.log(track)
-        this.setState({ track })
+  updateTrack(trackId) {
+    fetchTrack(trackId)
+      .then(data => { 
+        console.log("track:", data)
+        this.setState({
+          track: data.message.body.track
+        })
       })
       .catch(err => console.log("Error to get Musix Match data:", err))
   }
