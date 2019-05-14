@@ -30,9 +30,16 @@ const fetchSearchTrack = (queryTrack) => {
   return fetchMusixMatch(method, params)
 }
 
+const fetchTopTracks = () => {
+  const method = "chart.tracks.get"
+  const params = "chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1"
+  return fetchMusixMatch(method, params)
+}
+
 export {
   fetchLyrics,
   fetchTrack,
-  fetchSearchTrack
+  fetchSearchTrack,
+  fetchTopTracks
 }
 

@@ -1,36 +1,36 @@
-/* eslint-disable no-undef */
-/* eslint-disable quotes */
 import React, { Component } from "react"
+import { fetchTopTracks } from "../api/musixmatch"
 
 const Context = React.createContext()
+
+const reducer = (prevState, action) => {
+  const newState = { ...prevState }
+  switch (action.type) {
+    case "SEARCH_TRACKS":
+      newState.trackList = action.payload
+      newState.heading = "Search Results"
+      return newState
+    default:
+      return prevState
+  }
+}
 
 class ContextProvider extends Component {
   constructor(props) {
     super(props) 
     this.state = {
       trackList: [],
-      heading: "Top 10 Tracks"
+      heading: "Top 10 Tracks",
+      dispatch: action => this.setState(state => reducer(state, action))
     }
   }
 
   componentDidMount() {
-    const CORS_URL = "https://cors-anywhere.herokuapp.com/"
-
-    const MUSIX_MATCH_ROOT_URL = "https://api.musixmatch.com/ws/1.1/"
-
-    const API_METHOD = "chart.tracks.get"
-
-    const PARAMS = 
-      "?chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1" +
-      `&apikey=${process.env.REACT_APP_MUSIXMATCH_API_KEY}`
-
-    const URL = CORS_URL + MUSIX_MATCH_ROOT_URL + API_METHOD + PARAMS
-
-    fetch(URL)
-      .then(response => response.json())
+    fetchTopTracks()
       .then(data => {
-        const trackList = data.message.body.track_list.map(item => item.track)
-        this.setState({ trackList })
+        this.setState({
+          trackList: data.message.body.track_list.map(item => item.track)
+        })
       })
       .catch(err => console.log("Error to get Musix Match data:", err))
   }
